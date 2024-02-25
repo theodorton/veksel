@@ -1,0 +1,9 @@
+# Start postgres on port 5555 mapped to localhost
+services:
+  postgres16:
+    image: "postgres:16"
+    ports:
+      - "5555:5432"
+    environment:
+      POSTGRES_USER: veksel
+      POSTGRES_PASSWORD: foobar

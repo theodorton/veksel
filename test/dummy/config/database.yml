@@ -1,0 +1,23 @@
+# SQLite. Versions 3.8.0 and up are supported.
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem "sqlite3"
+#
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: veksel_dummy_development<%= `bundle exec veksel suffix` %>
+  port: 5555
+  host: localhost
+  username: veksel
+  password: foobar
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: veksel_dummy_test
+  port: 5555
+  host: localhost
+  username: veksel
+  password: foobar
