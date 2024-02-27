@@ -58,6 +58,10 @@ $ gem install veksel
 - Explicit/optional branching
 - Other database drivers
 
+## Sponsors
+
+Veksel is sponsored by [Skalar](https://github.com/Skalar)
+
 ## License
 
 Veksel is licensed under MIT.
