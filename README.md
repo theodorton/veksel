@@ -37,7 +37,7 @@ bin/rails veksel:fork
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "veksel", group: :development
+gem "veksel"
 ```
 
 And then execute:
