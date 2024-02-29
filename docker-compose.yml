@@ -7,3 +7,13 @@ services:
     environment:
       POSTGRES_USER: veksel
       POSTGRES_PASSWORD: foobar
+  ci:
+    build: .
+    network_mode: host
+    command: bin/test
+    depends_on:
+      - postgres16
+    volumes:
+      - .:/veksel
+    environment:
+      - CI=1
