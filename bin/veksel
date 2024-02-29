@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
-require 'veksel'
+require 'veksel/cli'
 
 case ARGV[0]
 when 'suffix'
-  print Veksel.suffix
+  Veksel::CLI.suffix
+when 'fork'
+  Veksel::CLI.fork
 end

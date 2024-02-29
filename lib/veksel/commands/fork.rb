@@ -15,9 +15,8 @@ module Veksel
       def perform
         return if pg_cluster.target_populated?(target_db)
 
-        ActiveSupport::Notifications.instrument "veksel.fork", source: source_db, target: target_db do
-          pg_cluster.transfer(from: source_db, to: target_db)
-        end
+        pg_cluster.create_database(target_db)
+        pg_cluster.transfer(from: source_db, to: target_db)
       end
     end
   end

@@ -15,7 +15,7 @@ module Veksel
     end
 
     def skip_fork?
-      suffix.blank?
+      suffix.to_s.strip.empty?
     end
 
     def suffix

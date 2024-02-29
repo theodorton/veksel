@@ -25,7 +25,7 @@ class VekselTest < ActiveSupport::TestCase
   test "integration" do
     Dir.chdir('test/dummy') do
       git_checkout('somebranch') do
-        system!('bin/rails veksel:fork')
+        system!('bundle exec veksel fork')
         current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
         assert_equal 'veksel_dummy_development_somebranch', current_db
         assert_equal `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development`, `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development_somebranch`
@@ -33,14 +33,38 @@ class VekselTest < ActiveSupport::TestCase
     end
   end
 
+  test "performance" do
+    def measure_in_ms(&blk)
+      t0 = (Time.now.to_f * 1000).to_i
+      yield
+      t1 = (Time.now.to_f * 1000).to_i
+      return t1 - t0
+    end
+
+    Dir.chdir('test/dummy') do
+      git_checkout('somebranch') do
+        Tempfile.open do |buffer|
+          command_duration = measure_in_ms do
+            system!('bundle exec veksel fork', out: buffer.path.to_s)
+          end
+          buffer.rewind
+          output = buffer.read
+          fork_duration = output.match(/Forked database in (\d+)ms/)[1].to_i
+          allowed_overhead_ms = 200
+          assert_operator command_duration, :<, fork_duration + allowed_overhead_ms
+        end
+      end
+    end
+  end
+
   test "db:create should be idempotent and not fail on subsequent checkouts" do
     Dir.chdir('test/dummy') do
       git_checkout('somebranch') do
-        system!('bin/rails veksel:fork')
+        system!('bundle exec veksel fork')
       end
 
       git_checkout('somebranch') do
-        system!('bin/rails veksel:fork')
+        system!('bundle exec veksel fork')
       end
     end
   end
@@ -48,7 +72,7 @@ class VekselTest < ActiveSupport::TestCase
   test "branch names with underscore should work fine" do
     Dir.chdir('test/dummy') do
       git_checkout('some_branch') do
-        system!('bin/rails veksel:fork')
+        system!('bundle exec veksel fork')
         current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
         assert_equal 'veksel_dummy_development_some_branch', current_db
         assert_equal `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development`, `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development_some_branch`

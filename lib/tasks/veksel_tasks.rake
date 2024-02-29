@@ -1,23 +1,9 @@
 namespace :veksel do
-  task :precreate do
-    ActiveSupport::Notifications.subscribe "veksel.fork" do |*args|
-      event = ActiveSupport::Notifications::Event.new(*args)
-      puts "Forked database in #{event.duration.to_i}ms"
-      File.open("log/veksel.log", "a") do |f|
-        f.puts("Forked database in #{event.duration.to_i}ms")
-        f.puts("  Source: #{event.payload[:source]}")
-        f.puts("  Target: #{event.payload[:target]}")
-      end
-    end
-  end
-
   desc "Fork the database from the main branch"
-  task fork: ['db:create', 'veksel:precreate'] do
-    next if Veksel.skip_fork?
-    require 'veksel/commands/fork'
+  task :fork do
+    require 'veksel/cli'
 
-    db = ActiveRecord::Base.configurations.find_db_config('development')
-    Veksel::Commands::Fork.new(db).perform
+    Veksel::CLI.fork
   end
 
   desc "List forked databases"

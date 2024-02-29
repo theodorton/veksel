@@ -7,7 +7,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: veksel_dummy_development<%= `bundle exec veksel suffix` %>
+  database: veksel_dummy_development
   port: 5555
   host: localhost
   username: veksel

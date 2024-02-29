@@ -4,7 +4,7 @@ PATH
     veksel (0.1.0)
       activerecord
       pg
-      rails (>= 6, < 8)
+      rails (>= 7.1.0, < 8)
 
 GEM
   remote: https://rubygems.org/
@@ -83,10 +83,6 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
-    appraisal (2.5.0)
-      bundler
-      rake
-      thor (>= 0.14.0)
     base64 (0.2.0)
     bigdecimal (3.1.6)
     builder (3.2.4)
@@ -246,7 +242,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  appraisal
   guard (~> 2.18)
   guard-minitest (~> 2.4)
   pg

@@ -22,9 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.executables << 'veksel'
 
-  spec.add_dependency "rails", ">= 6", "< 8"
+  spec.add_dependency "rails", ">= 7.1.0", "< 8"
   spec.add_dependency "activerecord"
   spec.add_dependency "pg"
-
-  spec.add_development_dependency "appraisal"
 end

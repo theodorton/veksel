@@ -15,6 +15,10 @@ module Veksel
       end
     end
 
+    def create_database(dbname)
+      system(pg_env, %[createdb --no-password #{dbname}], exception: true)
+    end
+
     def transfer(from:, to:)
       r, w = IO.pipe(autoclose: true)
       spawn(pg_env, "pg_dump #{pg_connection_args(from)} --format=c", out: w)

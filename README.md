@@ -9,22 +9,24 @@ Postgresql is currently the only supported database driver.
 
 ## Usage
 
-Change the following line in `config/database.yml`
+Out of the box, Veksel requires explicit invocation to work. Refer to [Git hook](#git-hook) below if you're interested in a more automated approach.
 
-```yaml
-development:
-  database: your_app_development<%= `bundle exec veksel suffix` %>
-```
+Checkout a new branch and run `bundle exec veksel fork`. A new database with a suffix matching your branch name will be created and `tmp/restart.txt` will be touched so your application servers restart. Both database structure and contents will be copied from your primary development database and Veksel will tell Rails on boot that the forked database should be used.
 
-Checkout a new branch and run `bin/rails veksel:fork`. A new database with a suffix matching your branch name will be created.
+When moving back to your `main` branch, run `touch tmp/restart.txt` to make Rails connect to default development database.
 
 ### Veksel tasks
 
+The CLI supports the following commands
+
 ```
-veksel:clean                       Delete forked databases
-veksel:fork                        Fork the database from the main branch
-veksel:list                        List forked databases
+veksel fork                        Create a forked database
+veksel clean                       Delete forked databases
+veksel fork                        Fork the database from the main branch
+veksel list                        List forked databases
 ```
+
+You can also run the commands as rake tasks (e.g. `bin/rails veksel:list`), albeit with a penalty hit.
 
 ## Git hook
 
@@ -32,7 +34,7 @@ Add the following to `.git/hooks/post-checkout` to automatically fork your datab
 
 ```
 #!/bin/sh
-bin/rails veksel:fork
+bundle exec veksel fork
 ```
 
 ## Installation
@@ -40,7 +42,7 @@ bin/rails veksel:fork
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "veksel"
+gem "veksel", group: :development
 ```
 
 And then execute:
