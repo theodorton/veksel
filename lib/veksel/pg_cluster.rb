@@ -19,7 +19,8 @@ module Veksel
       r, w = IO.pipe(autoclose: true)
       spawn(pg_env, "pg_dump #{pg_connection_args(from)} --format=c", out: w)
       pid_psql = spawn(pg_env, "pg_restore --single-transaction --exit-on-error #{pg_connection_args(to)}", in: r)
-      unless Process::Status.wait(pid_psql).success?
+      status = Process::Status.wait(pid_psql)
+      unless status.success?
         # TODO: Write error log to a tempfile inside the tmp directory of the current directory
         raise "pg_restore failed with status #{status.exitstatus}"
       end
