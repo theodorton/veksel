@@ -6,26 +6,18 @@ class VekselTest < ActiveSupport::TestCase
   end
 
   def git_checkout(branch, &blk)
-    system!("git checkout -B #{branch}")
-    blk.call
+    system!("git checkout -q -B #{branch}")
+    blk.call if block_given?
   ensure
-    system!("git checkout main")
-  end
-
-  def system!(command, options = {})
-    system(command, {
-      exception: true,
-      out: '/dev/null',
-      err: '/dev/null',
-    }.merge(options))
+    system!("git checkout -q main") if block_given?
   end
 
   def setup
     ENV['RAILS_ENV'] = 'development'
-    system!("git checkout main")
-    system!("git branch -D somebranch", { exception: false })
-    system!("git branch -D some_branch", { exception: false })
     Dir.chdir('test/dummy') do
+      git_checkout('main')
+      system("git branch -q -D somebranch", { exception: false, err: '/dev/null' })
+      system("git branch -q -D some_branch", { exception: false, err: '/dev/null' })
       system!('bin/rails veksel:clean')
     end
   end
