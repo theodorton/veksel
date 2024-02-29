@@ -15,8 +15,8 @@ module Veksel
       def perform
         return if pg_cluster.target_populated?(target_db)
 
-        pg_cluster.create_database(target_db)
-        pg_cluster.transfer(from: source_db, to: target_db)
+        pg_cluster.kill_connection(source_db)
+        pg_cluster.create_database(target_db, template: source_db)
       end
     end
   end

@@ -15,19 +15,12 @@ module Veksel
       end
     end
 
-    def create_database(dbname)
-      system(pg_env, %[createdb --no-password #{dbname}], exception: true)
+    def kill_connection(dbname)
+      system(pg_env, %[psql #{pg_connection_args('postgres')} -c "select pg_terminate_backend(pid) from pg_stat_activity where datname = '#{dbname}' and pid <> pg_backend_pid();"], exception: true, out: '/dev/null')
     end
 
-    def transfer(from:, to:)
-      r, w = IO.pipe(autoclose: true)
-      spawn(pg_env, "pg_dump #{pg_connection_args(from)} --format=c", out: w)
-      pid_psql = spawn(pg_env, "pg_restore --single-transaction --exit-on-error #{pg_connection_args(to)}", in: r)
-      status = Process::Status.wait(pid_psql)
-      unless status.success?
-        # TODO: Write error log to a tempfile inside the tmp directory of the current directory
-        raise "pg_restore failed with status #{status.exitstatus}"
-      end
+    def create_database(dbname, template:)
+      system(pg_env, %[createdb --no-password --template=#{template} #{dbname}], exception: true)
     end
 
     def list_databases(prefix:)
