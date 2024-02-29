@@ -1,3 +1,6 @@
+[![Gem Version](https://badge.fury.io/rb/veksel.svg)](https://rubygems.org/gems/veksel)
+[![Build status](https://github.com/theodorton/veksel/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/theodorton/veksel/actions?query=event%3Apush+branch%3Amain)
+
 # Veksel: Database branching for Rails
 
 Veksel keeps seperate databases for every branch in your development environment. This makes it easy to experiment with schema changes and data with less risk and avoid conflicting changes to `schema.rb` when branches have different sets of migrations. The inspiration for the gem came from [branch support in Neon](https://neon.tech/docs/manage/branches).
