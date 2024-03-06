@@ -13,6 +13,7 @@ module Veksel
       require 'veksel/commands/fork'
       require 'psych'
       require 'ostruct'
+      require 'fileutils'
 
       config = Psych.safe_load(File.read('config/database.yml'), aliases: true)['development'].transform_keys(&:to_sym)
       target_database = config[:database] + Veksel.suffix
