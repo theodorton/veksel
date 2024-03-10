@@ -63,6 +63,28 @@ $ gem install veksel
 - Explicit/optional branching
 - Other database drivers
 
+## Release process
+
+```shell
+# Bump version number in lib/veksel/version.rb
+
+# Update lockfile
+bundle install
+
+# Update changelog, review manually before committing
+conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
+git commit -m 'chore(release): x.y.z'
+git push origin
+git tag vx.y.z
+git push origin vx.y.z
+
+# Build and push gem
+gem build
+gem push veksel-x.y.z.gem
+
+# Upload the veksel-x-y-z.gem file to the Github release page
+```
+
 ## Sponsors
 
 Veksel is sponsored by [Skalar](https://github.com/Skalar)

@@ -1,3 +1,9 @@
+## [0.2.1](https://github.com/theodorton/veksel/compare/v0.2.0...v0.2.1) (2024-03-10)
+
+### Bug Fixes
+
+- Require fileutils as it's not loaded by default in some Ruby versions. ([66833d0](https://github.com/theodorton/veksel/commit/66833d01ee19345de26435bf267ca41f650d3931))
+
 ## [0.2.0](https://github.com/theodorton/veksel/compare/v0.1.0...v0.2.0) (2024-02-29)
 
 ### ⚠ BREAKING CHANGES
