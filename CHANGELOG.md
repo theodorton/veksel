@@ -1,3 +1,9 @@
+## [0.2.2](https://github.com/theodorton/veksel/compare/v0.2.1...v0.2.2) (2024-03-12)
+
+### Bug Fixes
+
+- support ERB in database.yml ([9ae2aef](https://github.com/theodorton/veksel/commit/9ae2aefd5a8c6fc2fe445eb63ec8f9d3647389f4))
+
 ## [0.2.1](https://github.com/theodorton/veksel/compare/v0.2.0...v0.2.1) (2024-03-10)
 
 ### Bug Fixes
