@@ -9,6 +9,16 @@ def system!(command, options = {})
   }.merge(options))
 end
 
+def swap_db_config(new_db_config_name, &block)
+  config_path = File.join(File.dirname(__FILE__), 'dummy/config/')
+  FileUtils.mv(File.join(config_path, 'database.yml'), File.join(config_path, 'database.yml.bak'))
+  FileUtils.cp(File.join(config_path, new_db_config_name), File.join(config_path, 'database.yml'))
+
+  block.call
+ensure
+  FileUtils.mv(File.join(config_path, 'database.yml.bak'), File.join(config_path, 'database.yml'))
+end
+
 Dir.chdir('test/dummy') do
   # Initialize a new git repository in the dummy app
   system!('rm -rf .git')

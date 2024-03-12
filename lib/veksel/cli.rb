@@ -15,7 +15,8 @@ module Veksel
       require 'ostruct'
       require 'fileutils'
 
-      config = Psych.safe_load(File.read('config/database.yml'), aliases: true)['development'].transform_keys(&:to_sym)
+      config = read_config('config/database.yml')[:development]
+
       target_database = config[:database] + Veksel.suffix
       db = OpenStruct.new(configuration_hash: config, database: target_database)
       Veksel::Commands::Fork.new(db).perform
@@ -23,6 +24,17 @@ module Veksel
       duration = ((Time.now.to_f - t1) * 1000).to_i
       FileUtils.touch('tmp/restart.txt')
       puts "Forked database in #{duration.to_i}ms"
+    end
+
+    private_class_method def self.read_config(path)
+      raw_config = File.read(path)
+
+      if raw_config.include?('<%=')
+        require 'erb'
+        raw_config = ERB.new(raw_config).result
+      end
+
+      Psych.safe_load(raw_config, aliases: true, symbolize_names: true)
     end
   end
 end

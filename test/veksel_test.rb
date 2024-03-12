@@ -22,13 +22,29 @@ class VekselTest < ActiveSupport::TestCase
     end
   end
 
-  test "integration" do
-    Dir.chdir('test/dummy') do
-      git_checkout('somebranch') do
-        system!('bundle exec veksel fork')
-        current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
-        assert_equal 'veksel_dummy_development_somebranch', current_db
-        assert_equal `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development`, `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development_somebranch`
+  class IntegrationTests < VekselTest
+    def run_fork_test
+      system!('bundle exec veksel fork')
+      current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
+      assert_equal 'veksel_dummy_development_somebranch', current_db
+      assert_equal `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development`, `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development_somebranch`
+    end
+
+    test "veksel fork should work with database.yml without ERB" do
+      Dir.chdir('test/dummy') do
+        git_checkout('somebranch') do
+          run_fork_test
+        end
+      end
+    end
+
+    test "veksel fork should work with database.yml with ERB" do
+      swap_db_config('database.erb.yml') do
+        Dir.chdir('test/dummy') do
+          git_checkout('somebranch') do
+            run_fork_test
+          end
+        end
       end
     end
   end
