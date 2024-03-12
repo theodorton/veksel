@@ -11,14 +11,12 @@ end
 
 def swap_db_config(new_db_config_name, &block)
   config_path = File.join(File.dirname(__FILE__), 'dummy/config/')
-
-  original_config = File.read(File.join(config_path, 'database.yml'))
-  new_config = File.read(File.join(config_path, new_db_config_name))
-  File.write(File.join(config_path, 'database.yml'), new_config)
+  FileUtils.mv(File.join(config_path, 'database.yml'), File.join(config_path, 'database.yml.bak'))
+  FileUtils.cp(File.join(config_path, new_db_config_name), File.join(config_path, 'database.yml'))
 
   block.call
 ensure
-  File.write(File.join(config_path, 'database.yml'), original_config)
+  FileUtils.mv(File.join(config_path, 'database.yml.bak'), File.join(config_path, 'database.yml'))
 end
 
 Dir.chdir('test/dummy') do
