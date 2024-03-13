@@ -1,9 +1,9 @@
 module Veksel
   class PgCluster
-    attr_reader :configuration_hash
+    attr_reader :database_config
 
-    def initialize(configuration_hash)
-      @configuration_hash = configuration_hash
+    def initialize(database_config)
+      @database_config = database_config
     end
 
     def target_populated?(dbname)
@@ -40,6 +40,14 @@ module Veksel
       spawn(pg_env, %[dropdb --no-password #{dbname}])
     end
 
+    def source_database_name
+      database_config[:database]
+    end
+
+    def target_database_name
+      database_config[:database] + Veksel.suffix
+    end
+
     private
 
     def pg_connection_args(dbname)
@@ -48,10 +56,10 @@ module Veksel
 
     def pg_env
       {
-        'PGHOST' => configuration_hash[:host],
-        'PGPORT' => configuration_hash[:port]&.to_s,
-        'PGUSER' => configuration_hash[:username],
-        'PGPASSWORD' => configuration_hash[:password],
+        'PGHOST' => database_config[:host],
+        'PGPORT' => database_config[:port]&.to_s,
+        'PGUSER' => database_config[:username],
+        'PGPASSWORD' => database_config[:password],
       }.compact
     end
   end

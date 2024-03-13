@@ -15,11 +15,8 @@ module Veksel
       require 'ostruct'
       require 'fileutils'
 
-      config = read_config('config/database.yml')[:development]
-
-      target_database = config[:database] + Veksel.suffix
-      db = OpenStruct.new(configuration_hash: config, database: target_database)
-      Veksel::Commands::Fork.new(db).perform
+      database_config = read_config('config/database.yml')[:development]
+      Veksel::Commands::Fork.new(database_config).perform
 
       duration = ((Time.now.to_f - t1) * 1000).to_i
       FileUtils.touch('tmp/restart.txt')

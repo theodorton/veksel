@@ -5,10 +5,11 @@ module Veksel
     class Fork
       attr_reader :pg_cluster, :source_db, :target_db
 
-      def initialize(db)
-        @pg_cluster = PgCluster.new(db.configuration_hash)
-        @source_db = db.database.sub(%r[#{Veksel.suffix}$], '')
-        @target_db = db.database
+      def initialize(database_config)
+        @pg_cluster = PgCluster.new(database_config)
+        @source_db = pg_cluster.source_database_name
+        @target_db = pg_cluster.target_database_name
+
         raise "Source and target databases cannot be the same" if source_db == target_db
       end
 
