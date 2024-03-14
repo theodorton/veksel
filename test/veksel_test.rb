@@ -95,4 +95,16 @@ class VekselTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test "listing out databases" do
+    Dir.chdir('test/dummy') do
+      git_checkout('somebranch') do
+        system!('bundle exec veksel fork')
+        output = `bin/rails veksel:list`.lines.filter(&:present?).map(&:squish).map { |s| s.split(' ') }.to_enum
+        assert_equal 'Databases created by Veksel:', output.next.join(" ")
+        assert_equal %w[Branch Database Active], output.next
+        assert_equal %w[somebranch veksel_dummy_development_somebranch Yes], output.next
+      end
+    end
+  end
 end
