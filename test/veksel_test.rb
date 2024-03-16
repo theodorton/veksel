@@ -1,10 +1,6 @@
 require "test_helper"
 
-class VekselTest < ActiveSupport::TestCase
-  test "it has a version number" do
-    assert Veksel::VERSION
-  end
-
+module TestHelpers
   def git_checkout(branch, &blk)
     system!("git checkout -q -B #{branch}")
     blk.call if block_given?
@@ -21,8 +17,18 @@ class VekselTest < ActiveSupport::TestCase
       system!('bin/rails veksel:clean')
     end
   end
+end
 
-  class IntegrationTests < VekselTest
+class VekselTest < ActiveSupport::TestCase
+  include TestHelpers
+
+  test "it has a version number" do
+    assert Veksel::VERSION
+  end
+
+  class IntegrationTests < ActiveSupport::TestCase
+    include TestHelpers
+
     def run_fork_test
       system!('bundle exec veksel fork')
       current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
