@@ -11,15 +11,14 @@ module Veksel
       ActiveRecord::DatabaseConfigurations.register_db_config_handler do |env_name, name, url, config|
         next if url.present?
         next unless env_name == 'development' || env_name == 'test'
+        veksel_adapter = Veksel.adapter_for(config, exception: false)
+        database_name = "#{config[:database]}#{Veksel.suffix}"
+        next unless veksel_adapter&.target_populated?(database_name)
 
-        if PgCluster.new(config).target_populated?("#{config[:database]}#{Veksel.suffix}")
-          ActiveRecord::DatabaseConfigurations::HashConfig.new(env_name, name, config.merge({
-            database: "#{config[:database]}#{Veksel.suffix}",
-            veksel_main_database: config[:database],
-          }))
-        else
-          ActiveRecord::DatabaseConfigurations::HashConfig.new(env_name, name, config)
-        end
+        ActiveRecord::DatabaseConfigurations::HashConfig.new(env_name, name, config.merge({
+          database: database_name,
+          veksel_main_database: config[:database],
+        }))
       end
     end
   end

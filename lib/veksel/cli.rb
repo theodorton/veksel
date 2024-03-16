@@ -24,11 +24,13 @@ module Veksel
 
         target_database = config[:database] + Veksel.suffix
         db = OpenStruct.new(configuration_hash: config, database: target_database)
-        Veksel::Commands::Fork.new(db).perform
-
-        duration = ((Time.now.to_f - t1) * 1000).to_i
-        FileUtils.touch('tmp/restart.txt')
-        puts "Forked database in #{duration.to_i}ms"
+        if Veksel::Commands::Fork.new(db).perform
+          duration = ((Time.now.to_f - t1) * 1000).to_i
+          FileUtils.touch('tmp/restart.txt')
+          puts "Forked database in #{duration.to_i}ms"
+        end
+      rescue AdapterNotSupported => e
+        $stderr.puts "#{e.message} - fork skipped"
       end
 
       def read_config(path)

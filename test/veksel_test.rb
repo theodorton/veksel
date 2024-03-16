@@ -65,6 +65,26 @@ class VekselTest < ActiveSupport::TestCase
     end
   end
 
+  test "veksel fork should warn on unsupported database adapters" do
+    swap_db_config('database.sqlite.yml') do
+      Dir.chdir('test/dummy') do
+        begin
+          system!('bin/rails db:setup')
+          system!('bin/rails veksel:clean')
+
+          git_checkout('somebranch') do
+            Tempfile.open do |buffer|
+              system!('bundle exec veksel fork', exception: false, err: buffer.path.to_s)
+              buffer.rewind
+              output = buffer.read
+              assert_match /Veksel does not yet support sqlite3 - fork skipped/, output
+            end
+          end
+        end
+      end
+    end
+  end
+
   test "performance" do
     def measure_in_ms(&blk)
       t0 = (Time.now.to_f * 1000).to_i

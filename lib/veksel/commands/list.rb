@@ -1,12 +1,10 @@
-require_relative '../pg_cluster'
-
 module Veksel
   module Commands
     class List
       attr_reader :adapter
 
       def initialize(db)
-        @adapter = PgCluster.new(db.configuration_hash)
+        @adapter = Veksel.adapter_for(db.configuration_hash)
       end
 
       def perform

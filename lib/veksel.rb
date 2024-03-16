@@ -9,7 +9,20 @@ require "veksel/railtie" if defined?(Rails::Railtie)
 require "veksel/suffix"
 
 module Veksel
+  class AdapterNotSupported < StandardError; end
+
   class << self
+    def adapter_for(config, exception: true)
+      case config[:adapter]
+      when 'postgresql'
+        require_relative './veksel/pg_cluster'
+        Veksel::PgCluster.new(config)
+      else
+        return unless exception
+        raise AdapterNotSupported, "Veksel does not yet support #{config[:adapter]}"
+      end
+    end
+
     def current_branch
       `git rev-parse --abbrev-ref HEAD`.strip
     end
