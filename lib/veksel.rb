@@ -38,9 +38,5 @@ module Veksel
     def suffix
       Suffix.new(current_branch).to_s
     end
-
-    def prefix(dbname)
-      dbname.sub(%r[#{Veksel.suffix}$], '_')
-    end
   end
 end
