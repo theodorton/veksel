@@ -11,7 +11,11 @@ namespace :veksel do
     require 'veksel/commands/list'
 
     db = ActiveRecord::Base.configurations.find_db_config('development')
-    Veksel::Commands::List.new(db).perform
+    begin
+      Veksel::Commands::List.new(db).perform
+    rescue Veksel::AdapterNotSupported => e
+      $stderr.puts e.message
+    end
   end
 
   desc "Delete forked databases"
@@ -19,6 +23,10 @@ namespace :veksel do
     require 'veksel/commands/clean'
 
     db = ActiveRecord::Base.configurations.find_db_config('development')
-    Veksel::Commands::Clean.new(db).perform
+    begin
+      Veksel::Commands::Clean.new(db).perform
+    rescue Veksel::AdapterNotSupported => e
+      $stderr.puts "#{e.message} - clean skipped"
+    end
   end
 end
