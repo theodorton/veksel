@@ -6,6 +6,18 @@ module Veksel
       @configuration_hash = configuration_hash
     end
 
+    def main_database
+      configuration_hash[:veksel_main_database] || configuration_hash[:database]
+    end
+
+    def forked_databases
+      list_databases(prefix: forked_database_prefix)
+    end
+
+    def forked_database_prefix
+      "#{main_database}_"
+    end
+
     def target_populated?(dbname)
       IO.pipe do |r, w|
         spawn(pg_env, %[psql -t #{pg_connection_args(dbname)} -c "SELECT 'ok' FROM ar_internal_metadata LIMIT 1;"], out: w, err: '/dev/null')

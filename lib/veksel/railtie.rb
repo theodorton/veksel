@@ -14,7 +14,8 @@ module Veksel
 
         if PgCluster.new(config).target_populated?("#{config[:database]}#{Veksel.suffix}")
           ActiveRecord::DatabaseConfigurations::HashConfig.new(env_name, name, config.merge({
-            database: "#{config[:database]}#{Veksel.suffix}"
+            database: "#{config[:database]}#{Veksel.suffix}",
+            veksel_main_database: config[:database],
           }))
         else
           ActiveRecord::DatabaseConfigurations::HashConfig.new(env_name, name, config)

@@ -14,6 +14,10 @@ module Veksel
       `git rev-parse --abbrev-ref HEAD`.strip
     end
 
+    def active_branches
+      `git for-each-ref 'refs/heads/' --format '%(refname)'`.split("\n").map { |ref| ref.sub('refs/heads/', '') }
+    end
+
     def skip_fork?
       suffix.to_s.strip.empty?
     end
