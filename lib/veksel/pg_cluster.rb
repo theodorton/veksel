@@ -1,5 +1,7 @@
 module Veksel
   class PgCluster
+    Database = Struct.new(:name, :branch)
+
     attr_reader :configuration_hash
 
     def initialize(configuration_hash)
@@ -11,11 +13,14 @@ module Veksel
     end
 
     def forked_databases
-      list_databases(prefix: forked_database_prefix)
+      list_databases(prefix: forked_database_prefix).map do |name|
+        Database.new(name, name.sub(forked_database_prefix, ''))
+      end
     end
 
-    def forked_database_prefix
-      "#{main_database}_"
+    def db_name_for_suffix(suffix)
+      return main_database if suffix.empty?
+      "#{forked_database_prefix}#{suffix}"
     end
 
     def target_populated?(dbname)
@@ -53,6 +58,10 @@ module Veksel
     end
 
     private
+
+    def forked_database_prefix
+      "#{main_database}_"
+    end
 
     def pg_connection_args(dbname)
       "-d #{dbname} --no-password"

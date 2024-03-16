@@ -2,8 +2,6 @@
 require 'veksel/cli'
 
 case ARGV[0]
-when 'suffix'
-  Veksel::CLI.suffix
 when 'fork'
   Veksel::CLI.fork
 end

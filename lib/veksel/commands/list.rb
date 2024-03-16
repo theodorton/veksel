@@ -18,8 +18,8 @@ module Veksel
 
         hash = {}
         databases.each do |database|
-          branch = database.sub(adapter.forked_database_prefix, '')
-          hash[branch] = database
+          branch = database.branch
+          hash[branch] = database.name
         end
 
         longest_branch_name = hash.keys.max_by(&:length).length

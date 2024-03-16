@@ -12,8 +12,10 @@ module Veksel
         next if url.present?
         next unless env_name == 'development' || env_name == 'test'
         veksel_adapter = Veksel.adapter_for(config, exception: false)
-        database_name = "#{config[:database]}#{Veksel.suffix}"
-        next unless veksel_adapter&.target_populated?(database_name)
+        next unless veksel_adapter
+
+        database_name = veksel_adapter.db_name_for_suffix(Veksel.suffix)
+        next unless veksel_adapter.target_populated?(database_name)
 
         ActiveRecord::DatabaseConfigurations::HashConfig.new(env_name, name, config.merge({
           database: database_name,

@@ -2,18 +2,15 @@ require 'veksel'
 
 module Veksel
   module CLI
-    class << self
-      def suffix
-        print Veksel.suffix
-      end
+    DbConfig = Struct.new('DbConfig', :configuration_hash)
 
+    class << self
       def fork
         return if Veksel.skip_fork?
         t1 = Time.now.to_f
 
         require 'veksel/commands/fork'
         require 'psych'
-        require 'ostruct'
         require 'fileutils'
 
         config = read_config('config/database.yml')[:development]
@@ -23,7 +20,7 @@ module Veksel
         end
 
         target_database = config[:database] + Veksel.suffix
-        db = OpenStruct.new(configuration_hash: config, database: target_database)
+        db = DbConfig.new(config)
         if Veksel::Commands::Fork.new(db).perform
           duration = ((Time.now.to_f - t1) * 1000).to_i
           FileUtils.touch('tmp/restart.txt')

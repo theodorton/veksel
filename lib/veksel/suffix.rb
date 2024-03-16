@@ -11,7 +11,7 @@ module Veksel
       when *PROTECTED_BRANCHES
         ""
       else
-        "_#{@branch_name}"
+        @branch_name
       end
     end
   end

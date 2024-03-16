@@ -26,6 +26,22 @@ class VekselTest < ActiveSupport::TestCase
     assert Veksel::VERSION
   end
 
+  test "use default database in main branch" do
+    Dir.chdir('test/dummy') do
+      current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
+      assert_equal 'veksel_dummy_development', current_db
+    end
+  end
+
+  test "use default database in master branch" do
+    Dir.chdir('test/dummy') do
+      git_checkout('master') do
+        current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
+        assert_equal 'veksel_dummy_development', current_db
+      end
+    end
+  end
+
   class IntegrationTests < ActiveSupport::TestCase
     include TestHelpers
 

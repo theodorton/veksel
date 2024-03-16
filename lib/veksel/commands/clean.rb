@@ -11,10 +11,10 @@ module Veksel
         active_branches = Veksel.active_branches
 
         stale_databases = all_databases.filter do |database|
-          active_branches.none? { |branch| database.end_with?("_#{branch}") }
+          active_branches.none? { |branch| database.branch == branch }
         end
         stale_databases.each do |database|
-          @adapter.drop_database(database, dry_run: @dry_run)
+          @adapter.drop_database(database.name, dry_run: @dry_run)
         end
       end
     end

@@ -5,8 +5,8 @@ module Veksel
 
       def initialize(db)
         @adapter = Veksel.adapter_for(db.configuration_hash)
-        @source_db = db.database.sub(%r[#{Veksel.suffix}$], '')
-        @target_db = db.database
+        @source_db = adapter.main_database
+        @target_db = adapter.db_name_for_suffix(Veksel.suffix)
         raise "Source and target databases cannot be the same" if source_db == target_db
       end
 
