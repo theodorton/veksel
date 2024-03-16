@@ -28,6 +28,13 @@ Dir.chdir('test/dummy') do
   system!('git add .')
   system!('git commit -q -m "Initial commit"')
 
+  pwd = Dir.pwd
+  at_exit do
+    Dir.chdir(pwd) do
+      system!('rm -rf .git')
+    end
+  end
+
   # Make sure the database is setup in main
   system('bin/rails db:setup') || raise("Failed to setup database")
 end
