@@ -16,6 +16,10 @@ module Veksel
       require 'fileutils'
 
       config = read_config('config/database.yml')[:development]
+      if config.key?(:primary)
+        config = config[:primary]
+        $stderr.puts "Warning: Only your primary database will be forked"
+      end
 
       target_database = config[:database] + Veksel.suffix
       db = OpenStruct.new(configuration_hash: config, database: target_database)

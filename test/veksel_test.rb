@@ -53,6 +53,16 @@ class VekselTest < ActiveSupport::TestCase
         end
       end
     end
+
+    test "veksel fork should work when using primary: db config" do
+      swap_db_config('database.primary.yml') do
+        Dir.chdir('test/dummy') do
+          git_checkout('somebranch') do
+            run_fork_test
+          end
+        end
+      end
+    end
   end
 
   test "performance" do

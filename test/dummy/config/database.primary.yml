@@ -1,0 +1,19 @@
+development:
+  primary:
+    adapter: postgresql
+    encoding: unicode
+    database: veksel_dummy_development
+    port: 5555
+    host: localhost
+    username: veksel
+    password: foobar
+
+test:
+  primary:
+    adapter: postgresql
+    encoding: unicode
+    database: veksel_dummy_test
+    port: 5555
+    host: localhost
+    username: veksel
+    password: foobar
