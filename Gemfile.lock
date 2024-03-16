@@ -3,7 +3,6 @@ PATH
   specs:
     veksel (0.2.2)
       activerecord
-      pg
       rails (>= 7.1.0, < 8)
 
 GEM

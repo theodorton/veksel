@@ -24,5 +24,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rails", ">= 7.1.0", "< 8"
   spec.add_dependency "activerecord"
-  spec.add_dependency "pg"
 end
