@@ -1,9 +1,3 @@
-if defined?(Rails::VERSION)
-  if Rails::VERSION::MAJOR < 6
-    raise "Veksel requires Rails 6 or later"
-  end
-end
-
 require "veksel/version"
 require "veksel/railtie" if defined?(Rails::Railtie)
 require "veksel/suffix"
