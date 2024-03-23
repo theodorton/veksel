@@ -1,13 +1,14 @@
 module Veksel
-  PROTECTED_BRANCHES = %w[master main HEAD].freeze
-
   class Suffix
+    PROTECTED_BRANCHES = %w[master main].freeze
+
     def initialize(branch_name)
       @branch_name = branch_name
     end
 
     def to_s
       case @branch_name
+      when 'HEAD'
       when *PROTECTED_BRANCHES
         ""
       else
