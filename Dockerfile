@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=3.3.3
+ARG RUBY_VERSION=3.3.5
 FROM ruby:${RUBY_VERSION}
 
 RUN apt update && apt install -y postgresql-common
