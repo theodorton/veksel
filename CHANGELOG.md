@@ -1,3 +1,15 @@
+## [0.3.0](https://github.com/theodorton/veksel/compare/v0.2.2...v0.3.0) (2024-09-04)
+
+### ⚠ BREAKING CHANGES
+
+- Veksel.prefix has been removed
+- Veksel.suffix no longer has a leading underscore
+- CLI: suffix command has been removed
+
+### Bug Fixes
+
+- support database.yml with explicit primary ([99ecb90](https://github.com/theodorton/veksel/commit/99ecb902f010a42c45c2b113c404036617addc69))
+
 ## [0.2.2](https://github.com/theodorton/veksel/compare/v0.2.1...v0.2.2) (2024-03-12)
 
 ### Bug Fixes
