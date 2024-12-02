@@ -3,7 +3,7 @@ PATH
   specs:
     veksel (0.3.0)
       activerecord
-      rails (>= 7.1.0, < 8)
+      rails (>= 7.1.0)
 
 GEM
   remote: https://rubygems.org/
