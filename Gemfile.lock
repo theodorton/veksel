@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    veksel (0.3.0)
+    veksel (0.3.1)
       activerecord
       rails (>= 7.1.0)
 

@@ -1,3 +1,22 @@
+## [](https://github.com/theodorton/veksel/compare/v0.3.0...v) (2024-12-02)
+
+
+### Features
+
+* support any rails version from 7.1 and up ([27fbabd](https://github.com/theodorton/veksel/commit/27fbabd2c0d36697086dabc845849e2ed67d88d9))
+
+
+### Bug Fixes
+
+* case/when fallthrough expected ([2b3161e](https://github.com/theodorton/veksel/commit/2b3161e687a0e700d7f0f57659a9511b7f9ac6b1))
+
+## [](https://github.com/theodorton/veksel/compare/v0.3.0...v) (2024-12-02)
+
+
+### Bug Fixes
+
+* case/when fallthrough expected ([2b3161e](https://github.com/theodorton/veksel/commit/2b3161e687a0e700d7f0f57659a9511b7f9ac6b1))
+
 ## [0.3.0](https://github.com/theodorton/veksel/compare/v0.2.2...v0.3.0) (2024-09-04)
 
 ### ⚠ BREAKING CHANGES
