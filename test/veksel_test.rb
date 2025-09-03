@@ -17,6 +17,12 @@ module TestHelpers
       system!('bin/rails veksel:clean')
     end
   end
+
+  def assert_equal_dbs(a, b)
+    expected = `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel --restrict-key=foobar #{a}`
+    actual = `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel --restrict-key=foobar #{b}`
+    assert_equal expected, actual
+  end
 end
 
 class VekselTest < ActiveSupport::TestCase
@@ -49,7 +55,7 @@ class VekselTest < ActiveSupport::TestCase
       system!('bundle exec veksel fork')
       current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
       assert_equal 'veksel_dummy_development_somebranch', current_db
-      assert_equal `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development`, `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development_somebranch`
+      assert_equal_dbs 'veksel_dummy_development', 'veksel_dummy_development_somebranch'
     end
 
     test "veksel fork should work with database.yml without ERB" do
@@ -143,7 +149,7 @@ class VekselTest < ActiveSupport::TestCase
         system!('bundle exec veksel fork')
         current_db = `bin/rails runner "print ApplicationRecord.connection.execute('SELECT current_database();')[0]['current_database']"`.chomp
         assert_equal 'veksel_dummy_development_some_branch', current_db
-        assert_equal `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development`, `PGPASSWORD=foobar pg_dump -s -h localhost -p 5555 -U veksel veksel_dummy_development_some_branch`
+        assert_equal_dbs 'veksel_dummy_development', 'veksel_dummy_development_some_branch'
       end
     end
   end
