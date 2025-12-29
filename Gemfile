@@ -6,7 +6,7 @@ gemspec
 
 gem "puma"
 
-gem "sqlite3", '~> 2.7'
+gem "sqlite3", '~> 2.9'
 gem "pg"
 
 # Start debugger with binding.b [https://github.com/ruby/debug]
