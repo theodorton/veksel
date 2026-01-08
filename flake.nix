@@ -2,6 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs-ruby.url = "github:bobvanderlinden/nixpkgs-ruby";
+    nixpkgs-ruby.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
   };
   outputs = {
@@ -18,7 +19,7 @@
       in
         pkgs.mkShell {
           buildInputs = with pkgs; [
-            nixpkgs-ruby.packages.x86_64-linux."ruby-${rubyVersion}"
+            nixpkgs-ruby.packages.${system}."ruby-${rubyVersion}"
             libyaml
             libffi
             libjson
