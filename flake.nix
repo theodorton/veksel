@@ -18,7 +18,7 @@
       in
         pkgs.mkShell {
           buildInputs = with pkgs; [
-            nixpkgs-ruby.packages.x86_64-linux."ruby-${rubyVersion}"
+            nixpkgs-ruby.packages.${system}."ruby-${rubyVersion}"
             libyaml
             libffi
             libjson

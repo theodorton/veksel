@@ -4,6 +4,7 @@
 ### Features
 
 * support any rails version from 7.1 and up ([27fbabd](https://github.com/theodorton/veksel/commit/27fbabd2c0d36697086dabc845849e2ed67d88d9))
+* support Ruby 4
 
 
 ### Bug Fixes
