@@ -13,4 +13,4 @@ gem "pg"
 # gem "debug", ">= 1.0.0"
 
 gem "guard", "~> 2.20"
-gem "guard-minitest", "~> 2.4"
+gem "guard-minitest", "~> 3.0"
