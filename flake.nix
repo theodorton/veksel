@@ -11,10 +11,11 @@
     flake-utils,
     ...
   }:
-    flake-utils.lib.eachDefaultSystem (system: {
-      devShell = let
-        pkgs = import nixpkgs {inherit system;};
-        lib = pkgs.lib;
+    flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = import nixpkgs {inherit system;};
+      lib = pkgs.lib;
+    in {
+      devShells.default = let
         rubyVersion = lib.strings.removeSuffix "\n" (builtins.readFile ./.ruby-version);
       in
         pkgs.mkShell {
@@ -33,5 +34,22 @@
           BUNDLE_PATH = "vendor/bundle";
           BUNDLE_CLEAN = "1";
         };
+
+      devShells.ruby4 = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          nixpkgs-ruby.packages.${system}."ruby-4.0.0"
+          libyaml
+          libffi
+          libjson
+          openssl
+          zlib
+        ];
+        nativeBuildInputs = with pkgs; [
+          pkg-config
+        ];
+
+        BUNDLE_PATH = "vendor/bundle";
+        BUNDLE_CLEAN = "1";
+      };
     });
 }
