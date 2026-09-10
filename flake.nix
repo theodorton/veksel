@@ -1,43 +1,20 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-    nixpkgs-ruby.url = "github:bobvanderlinden/nixpkgs-ruby";
-    nixpkgs-ruby.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
   };
   outputs = {
     nixpkgs,
-    nixpkgs-ruby,
     flake-utils,
     ...
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {inherit system;};
-      lib = pkgs.lib;
+      ruby = pkgs.ruby_4_0;
     in {
-      devShells.default = let
-        rubyVersion = lib.strings.removeSuffix "\n" (builtins.readFile ./.ruby-version);
-      in
-        pkgs.mkShell {
-          buildInputs = with pkgs; [
-            nixpkgs-ruby.packages.${system}."ruby-${rubyVersion}"
-            libyaml
-            libffi
-            libjson
-            openssl
-            zlib
-          ];
-          nativeBuildInputs = with pkgs; [
-            pkg-config
-          ];
-
-          BUNDLE_PATH = "vendor/bundle";
-          BUNDLE_CLEAN = "1";
-        };
-
-      devShells.ruby4 = pkgs.mkShell {
+      devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
-          nixpkgs-ruby.packages.${system}."ruby-4.0.0"
+          ruby
           libyaml
           libffi
           libjson
@@ -51,5 +28,20 @@
         BUNDLE_PATH = "vendor/bundle";
         BUNDLE_CLEAN = "1";
       };
+
+      # `nix flake check` fails if the devShell's ruby drifts from .ruby-version.
+      checks.ruby-version =
+        pkgs.runCommand "check-ruby-version" {
+          nativeBuildInputs = [ruby];
+          rubyVersionFile = ./.ruby-version;
+        } ''
+          expected=$(tr -d '[:space:]' < "$rubyVersionFile")
+          actual=$(ruby --version | cut -d' ' -f2)
+          if [ "$actual" != "$expected" ]; then
+            echo "ruby version mismatch: devShell provides $actual, .ruby-version pins $expected" >&2
+            exit 1
+          fi
+          touch $out
+        '';
     });
 }
