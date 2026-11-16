@@ -18,7 +18,7 @@ module Veksel
     end
 
     def current_branch
-      `git rev-parse --abbrev-ref HEAD`.strip
+      branch_from_reflog || branch_from_head
     end
 
     def active_branches
@@ -31,6 +31,16 @@ module Veksel
 
     def suffix
       Suffix.new(current_branch).to_s
+    end
+
+    private
+
+    def branch_from_reflog
+      `git reflog --max-count=1 --pretty=%gs --grep-reflog="checkout: moving from [^[:space:]]* to [^[:space:]]*"`.chomp.split(' ').last
+    end
+
+    def branch_from_head
+      `git rev-parse --abbrev-ref HEAD`.chomp
     end
   end
 end
