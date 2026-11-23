@@ -12,5 +12,5 @@ gem "pg"
 # Start debugger with binding.b [https://github.com/ruby/debug]
 # gem "debug", ">= 1.0.0"
 
-gem "guard", "~> 2.20"
+gem "guard", "~> 2.21"
 gem "guard-minitest", "~> 3.0"
